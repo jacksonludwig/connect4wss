@@ -32,7 +32,7 @@ export default {
         properties: {
           body: {
             type: 'object',
-            properties: { column: { type: 'number' } },
+            properties: { column: { type: 'number', minimum: 0, maximum: 6 } },
             required: ['column'],
           },
         },
