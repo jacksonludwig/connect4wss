@@ -9,7 +9,7 @@ const messageSchema = {
   type: 'object',
   properties: {
     name: {
-      enum: [ClientActions.CreateGame, ClientActions.JoinGame],
+      enum: [Client.Actions.CreateGame, Client.Actions.JoinGame],
     },
     gameId: {
       type: 'string',
@@ -27,7 +27,7 @@ function handleMessage(this: WebSocket.WebSocket, data: WebSocket.RawData, isBin
   console.log(messageData);
   console.log('-- END CLIENT MESSAGE --');
 
-  const action = JSON.parse(messageData) as ClientMessage.Message;
+  const action = JSON.parse(messageData) as Client.Message;
 
   const valid = validate(action);
 
@@ -37,15 +37,13 @@ function handleMessage(this: WebSocket.WebSocket, data: WebSocket.RawData, isBin
     return;
   }
 
-  // Action Router should handle modifying the global map of games
-  const doAction = ActionRouter[action.name as keyof typeof ActionRouter];
-
   // TODO handle missing action
-  if (typeof doAction !== 'function') {
+  if (typeof ActionRouter[action.name] !== 'function') {
     console.log('missing request action');
   }
 
-  doAction();
+  // Action Router should handle modifying the global map of games
+  ActionRouter[action.name](this, action.gameId);
 }
 
 export default handleMessage;
