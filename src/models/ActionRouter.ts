@@ -2,7 +2,7 @@ import { WebSocket } from 'ws';
 import Game from '../models/Game';
 import * as Client from '../types/Client';
 import * as Server from '../types/Server';
-import { saveGameToWS, savePlayerToWS } from '../utils/Websocket';
+import { saveGameToWS, savePlayerToWS } from '../utils/websocket';
 import WSResponseUtil from '../utils/WSResponseUtil';
 
 /**

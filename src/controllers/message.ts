@@ -2,30 +2,9 @@ import WebSocket from 'ws';
 import Ajv from 'ajv';
 import ActionRouter from '../models/ActionRouter';
 import * as Client from '../types/Client';
+import messageSchema from '../schema/message';
 
 const ajv = new Ajv();
-
-const messageSchema = {
-  type: 'object',
-  properties: {
-    name: { enum: [Client.Actions.CreateGame, Client.Actions.JoinGame] },
-  },
-  if: {
-    properties: {
-      name: { enum: [Client.Actions.JoinGame] },
-    },
-  },
-  then: {
-    properties: {
-      body: {
-        type: 'object',
-        properties: { gameId: { type: 'string' } },
-      },
-    },
-    required: ['body'],
-  },
-  required: [],
-};
 
 const validate = ajv.compile(messageSchema);
 
