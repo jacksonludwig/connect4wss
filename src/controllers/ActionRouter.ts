@@ -1,6 +1,9 @@
-import WebSocket from 'ws';
+import { WebSocket } from 'ws';
 import Game from '../models/Game';
 import * as Client from '../types/Client';
+import * as Server from '../types/Server';
+import { saveGameToWS, savePlayerToWS } from '../utils/Websocket';
+import WSResponseUtil from '../utils/WSResponseUtil';
 
 /**
  * Global map of games using their id as keys
@@ -16,8 +19,12 @@ class ActionRouter {
 
     games.set(newGame.gameId, newGame);
 
-    // TODO put player id on websocket
+    // put game id and player id on websocket
+    saveGameToWS(ws, newGame.gameId);
+    savePlayerToWS(ws, newGame.player1);
+
     // TODO send back game id and player id
+    ws.send(WSResponseUtil.success({ gameId: newGame.gameId, playerId: newGame.player1 }));
   }
 
   /**
@@ -29,8 +36,26 @@ class ActionRouter {
       // TODO
     }
 
-    // TODO put player id on websocket
+    const game = games.get(gameId);
+
+    // Check to see if game with id is in progress
+    if (!game) {
+      ws.send(WSResponseUtil.error(Server.Reason.GameNotFound));
+      return;
+    }
+
+    // Check if the game is full
+    if (game.player1 !== '' && game.player2 !== '') {
+      ws.send(WSResponseUtil.error(Server.Reason.GameFull));
+      return;
+    }
+
+    game.addPlayer();
+
+    // TODO put game id and player id on websocket
+
     // TODO send back player id
+    ws.send(WSResponseUtil.success({ playerId: game.player2 }));
   }
 }
 
