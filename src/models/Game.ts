@@ -8,16 +8,17 @@ type GameType = {
 class Game {
   public gameId: GameType['gameId'];
   public player1: GameType['player'];
-  public player2: GameType['player'];
+  public player2?: GameType['player'];
 
   constructor() {
     this.gameId = nanoid();
     this.player1 = nanoid();
   }
 
-  // TODO
   public addPlayer() {
-    return;
+    this.player2 = nanoid();
+
+    return this.player2;
   }
 }
 

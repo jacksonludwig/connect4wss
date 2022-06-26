@@ -1,5 +1,6 @@
 import WebSocket from 'ws';
 import Game from '../models/Game';
+import * as Client from '../types/Client';
 
 /**
  * Global map of games using their id as keys
@@ -22,7 +23,7 @@ class ActionRouter {
   /**
    * Add the player to an existing game
    */
-  public static JoinGame(ws: WebSocket, gameId?: string) {
+  public static JoinGame(ws: WebSocket, { gameId }: Client.JoinData) {
     // if no gameId is given, join the first available game we can find.
     if (!gameId) {
       // TODO

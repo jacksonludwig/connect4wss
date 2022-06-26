@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import Ajv from 'ajv';
-import Game from '../models/Game';
 import ActionRouter from './ActionRouter';
+import * as Client from '../types/Client';
 
 const ajv = new Ajv();
 
@@ -11,11 +11,9 @@ const messageSchema = {
     name: {
       enum: [Client.Actions.CreateGame, Client.Actions.JoinGame],
     },
-    gameId: {
-      type: 'string',
-    },
+    // body: {},
   },
-  required: ['name', 'gameId'],
+  required: ['name' /* , 'body' */],
 };
 
 const validate = ajv.compile(messageSchema);
@@ -40,10 +38,11 @@ function handleMessage(this: WebSocket.WebSocket, data: WebSocket.RawData, isBin
   // TODO handle missing action
   if (typeof ActionRouter[action.name] !== 'function') {
     console.log('missing request action');
+    return;
   }
 
   // Action Router should handle modifying the global map of games
-  ActionRouter[action.name](this, action.gameId);
+  ActionRouter[action.name](this, action.body as any);
 }
 
 export default handleMessage;
