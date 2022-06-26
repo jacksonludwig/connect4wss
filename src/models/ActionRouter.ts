@@ -2,7 +2,7 @@ import { WebSocket } from 'ws';
 import Game from '../models/Game';
 import * as Client from '../types/Client';
 import * as Server from '../types/Server';
-import { saveGameToWS, savePlayerToWS } from '../utils/websocket';
+import { getGameFromWS, getPlayerFromWS, saveGameToWS, savePlayerToWS } from '../utils/websocket';
 import WSResponseUtil from '../utils/WSResponseUtil';
 
 /**
@@ -62,6 +62,29 @@ class ActionRouter {
 
     // send back player id
     ws.send(WSResponseUtil.success({ playerId: game.player2 }));
+  }
+
+  /**
+   * Drop a piece in a column
+   */
+  public static PlacePiece(ws: WebSocket, { column }: Client.PlacePieceData) {
+    const gameId = getGameFromWS(ws);
+    const playerId = getPlayerFromWS(ws);
+
+    if (!gameId || !playerId) {
+      ws.send(WSResponseUtil.error(Server.Error.NotInGame));
+      return;
+    }
+
+    const game = games.get(gameId);
+
+    if (!game) {
+      ws.send(WSResponseUtil.error(Server.Error.GameNotFound));
+      return;
+    }
+
+    // TODO place piece
+    console.log('trying to place in column ' + column);
   }
 }
 

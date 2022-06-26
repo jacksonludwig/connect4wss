@@ -1,6 +1,7 @@
 export enum Error {
   GameNotFound = 'GameNotFound',
   GameFull = 'GameFull',
+  NotInGame = 'NotInGame',
 }
 
 export type JoinResponse = {
