@@ -8,12 +8,23 @@ const ajv = new Ajv();
 const messageSchema = {
   type: 'object',
   properties: {
-    name: {
-      enum: [Client.Actions.CreateGame, Client.Actions.JoinGame],
-    },
-    // body: {},
+    name: { enum: [Client.Actions.CreateGame, Client.Actions.JoinGame] },
   },
-  required: ['name' /* , 'body' */],
+  if: {
+    properties: {
+      name: { enum: [Client.Actions.JoinGame] },
+    },
+  },
+  then: {
+    properties: {
+      body: {
+        type: 'object',
+        properties: { gameId: { type: 'string' } },
+      },
+    },
+    required: ['body'],
+  },
+  required: [],
 };
 
 const validate = ajv.compile(messageSchema);
@@ -25,12 +36,17 @@ function handleMessage(this: WebSocket.WebSocket, data: WebSocket.RawData, isBin
   console.log(messageData);
   console.log('-- END CLIENT MESSAGE --');
 
-  const action = JSON.parse(messageData) as Client.Message;
+  let action: Client.Message;
 
-  const valid = validate(action);
+  try {
+    action = JSON.parse(messageData) as Client.Message;
+  } catch (error) {
+    console.log('could not parse message into json');
+    return;
+  }
 
   // TODO tell client message was busted and other stuff
-  if (!valid) {
+  if (!validate(action)) {
     console.log(validate.errors);
     return;
   }
