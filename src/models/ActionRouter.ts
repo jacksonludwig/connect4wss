@@ -54,7 +54,7 @@ class ActionRouter {
 
     // put game id and player id on websocket
     saveGameToWS(ws, game.gameId);
-    savePlayerToWS(ws, game.player1);
+    savePlayerToWS(ws, game.player2);
 
     // send back player id
     ws.send(WSResponseUtil.success({ playerId: game.player2 }));
