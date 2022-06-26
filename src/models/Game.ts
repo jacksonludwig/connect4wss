@@ -15,6 +15,7 @@ class Game {
     this.player1 = nanoid();
   }
 
+  // TODO
   public addPlayer() {
     return;
   }

@@ -15,6 +15,7 @@ class ActionRouter {
 
     games.set(newGame.gameId, newGame);
 
+    // TODO put player id on websocket
     // TODO send back game id and player id
   }
 
@@ -27,6 +28,7 @@ class ActionRouter {
       // TODO
     }
 
+    // TODO put player id on websocket
     // TODO send back player id
   }
 }
