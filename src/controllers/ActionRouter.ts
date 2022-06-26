@@ -15,16 +15,16 @@ class ActionRouter {
    * Add a new game to the global game map using the game id
    */
   public static CreateGame(ws: WebSocket): void {
-    const newGame = new Game();
+    const game = new Game();
 
-    games.set(newGame.gameId, newGame);
+    games.set(game.gameId, game);
 
     // put game id and player id on websocket
-    saveGameToWS(ws, newGame.gameId);
-    savePlayerToWS(ws, newGame.player1);
+    saveGameToWS(ws, game.gameId);
+    savePlayerToWS(ws, game.player1);
 
-    // TODO send back game id and player id
-    ws.send(WSResponseUtil.success({ gameId: newGame.gameId, playerId: newGame.player1 }));
+    // send back game id and player id
+    ws.send(WSResponseUtil.success({ gameId: game.gameId, playerId: game.player1 }));
   }
 
   /**
@@ -52,9 +52,11 @@ class ActionRouter {
 
     game.addPlayer();
 
-    // TODO put game id and player id on websocket
+    // put game id and player id on websocket
+    saveGameToWS(ws, game.gameId);
+    savePlayerToWS(ws, game.player1);
 
-    // TODO send back player id
+    // send back player id
     ws.send(WSResponseUtil.success({ playerId: game.player2 }));
   }
 }
