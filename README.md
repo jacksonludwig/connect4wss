@@ -9,3 +9,6 @@
 7. Server updates corresponding game state
 8. Player two sends message
 9. Server updates corresponding game state
+
+Every time the server updates the game state, it will broadcast the new game state to each client.
+The client should constantly render the new board state at all times.
