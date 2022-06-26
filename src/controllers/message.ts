@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import Ajv from 'ajv';
-import ActionRouter from '../models/ActionRouter';
+import ActionRouter, { games } from '../models/ActionRouter';
 import * as Client from '../types/Client';
 import messageSchema from '../schema/message';
 
@@ -38,6 +38,8 @@ function handleMessage(this: WebSocket.WebSocket, data: WebSocket.RawData, isBin
 
   // Action Router should handle modifying the global map of games
   ActionRouter[action.name](this, action.body as any);
+
+  console.log(games);
 }
 
 export default handleMessage;

@@ -1,4 +1,4 @@
-export enum Reason {
+export enum Error {
   GameNotFound = 'GameNotFound',
   GameFull = 'GameFull',
 }
@@ -14,6 +14,6 @@ export type CreateResponse = {
 
 export type Message = {
   status: 'rejected' | 'accepted';
-  reason?: Reason;
+  reason?: Error;
   body?: JoinResponse;
 };

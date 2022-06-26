@@ -3,9 +3,11 @@ export enum Actions {
   JoinGame = 'JoinGame',
 }
 
-export type JoinData = {
-  gameId: string;
-};
+export type JoinData =
+  | {
+      gameId: string;
+    }
+  | undefined;
 
 export type CreateData = null;
 

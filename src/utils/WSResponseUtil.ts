@@ -1,7 +1,7 @@
 import * as Server from '../types/Server';
 
 class WSResponseUtil {
-  public static error(reason: Server.Reason): string {
+  public static error(reason: Server.Error): string {
     const response = {
       status: 'rejected',
       reason: reason,

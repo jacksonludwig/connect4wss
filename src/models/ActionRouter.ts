@@ -30,23 +30,27 @@ class ActionRouter {
   /**
    * Add the player to an existing game
    */
-  public static JoinGame(ws: WebSocket, { gameId }: Client.JoinData) {
-    // if no gameId is given, join the first available game we can find.
-    if (!gameId) {
-      // TODO
-    }
+  public static JoinGame(ws: WebSocket, body: Client.JoinData) {
+    let game: Game | undefined;
 
-    const game = games.get(gameId);
+    // if no gameId is given, join the first available game we can find.
+    if (!body) {
+      const openGames = [...games.values()].filter((game) => game.player2 === '');
+
+      game = openGames.length ? openGames[0] : undefined;
+    } else {
+      game = games.get(body.gameId);
+    }
 
     // Check to see if game with id is in progress
     if (!game) {
-      ws.send(WSResponseUtil.error(Server.Reason.GameNotFound));
+      ws.send(WSResponseUtil.error(Server.Error.GameNotFound));
       return;
     }
 
     // Check if the game is full
-    if (game.player1 !== '' && game.player2 !== '') {
-      ws.send(WSResponseUtil.error(Server.Reason.GameFull));
+    if (game.player2 !== '') {
+      ws.send(WSResponseUtil.error(Server.Error.GameFull));
       return;
     }
 

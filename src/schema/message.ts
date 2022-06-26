@@ -15,9 +15,9 @@ export default {
       body: {
         type: 'object',
         properties: { gameId: { type: 'string' } },
+        required: ['gameId'],
       },
     },
-    required: ['body'],
   },
   required: [],
 };
