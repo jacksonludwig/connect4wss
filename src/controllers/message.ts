@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import Ajv from 'ajv';
-import ActionRouter from './ActionRouter';
+import ActionRouter from '../models/ActionRouter';
 import * as Client from '../types/Client';
 
 const ajv = new Ajv();
