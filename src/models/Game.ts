@@ -117,7 +117,7 @@ class Game {
    *
    * @throws if the column is already full.
    */
-  public placePiece(player: Omit<Player, 0>, column: number): boolean {
+  public placePiece(player: Omit<Player, 0>, column: number): Player {
     const col = this.board.map((row) => row[column]) as number[];
 
     // Sum up column to see if it is full
@@ -132,7 +132,7 @@ class Game {
 
     this.switchTurn();
 
-    return this.getWinner() > 0;
+    return this.getWinner();
   }
 }
 

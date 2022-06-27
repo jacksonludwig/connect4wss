@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import Game from '../models/Game';
+import Game, { Player } from '../models/Game';
 import * as Client from '../types/Client';
 import * as Server from '../types/Server';
 import {
@@ -103,8 +103,10 @@ class ActionRouter {
       return;
     }
 
+    let winner: Player;
+
     try {
-      game.placePiece(piece, column);
+      winner = game.placePiece(piece, column);
     } catch (err) {
       ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.FullColumn));
       return;
@@ -121,6 +123,10 @@ class ActionRouter {
         currentTurn: game.currentTurn,
       }),
     );
+
+    if (winner !== 0) {
+      // TODO broadcast winner
+    }
   }
 }
 
