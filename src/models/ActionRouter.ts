@@ -30,12 +30,7 @@ class ActionRouter {
     savePlayerToWS(ws, game.player1);
 
     // send back game id and player id
-    ws.send(
-      WSResponseUtil.success(Client.Actions.CreateGame, {
-        gameId: game.gameId,
-        playerId: game.player1,
-      }),
-    );
+    ws.send(WSResponseUtil.success(Client.Actions.CreateGame, { gameId: game.gameId }));
   }
 
   /**
@@ -79,7 +74,7 @@ class ActionRouter {
     );
 
     // send back player id
-    ws.send(WSResponseUtil.success(Client.Actions.JoinGame, { playerId: game.player2 }));
+    ws.send(WSResponseUtil.success(Client.Actions.JoinGame));
   }
 
   /**

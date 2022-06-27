@@ -11,12 +11,9 @@ export enum StatusNotification {
   PlayerJoined = 'PlayerJoined',
 }
 
-export type JoinResponse = {
-  playerId: string;
-};
+export type JoinResponse = Record<string, never>;
 
 export type CreateResponse = {
-  playerId: string;
   gameId: string;
 };
 

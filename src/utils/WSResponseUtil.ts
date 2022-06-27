@@ -13,10 +13,7 @@ class WSResponseUtil {
     return JSON.stringify(response);
   }
 
-  public static success(
-    name: Client.Actions,
-    body: Server.JoinResponse | Server.CreateResponse,
-  ): string {
+  public static success(name: Client.Actions, body?: Server.CreateResponse): string {
     const response = {
       name,
       type: 'response',
