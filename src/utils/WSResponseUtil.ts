@@ -24,10 +24,15 @@ class WSResponseUtil {
     return JSON.stringify(response);
   }
 
-  public static status(notification: Server.StatusNotification): string {
+  public static status(
+    status: 'success' | 'fail' | 'info',
+    notification: Server.StatusNotification,
+    player?: string,
+  ): string {
     const response = {
-      type: 'status',
+      status,
       message: notification,
+      player,
     } as Server.StatusMessage;
 
     return JSON.stringify(response);

@@ -5,10 +5,12 @@ export enum Error {
   GameFull = 'GameFull',
   NotInGame = 'NotInGame',
   FullColumn = 'FullColumn',
+  WrongTurn = 'WrongTurn',
 }
 
 export enum StatusNotification {
   PlayerJoined = 'PlayerJoined',
+  GameCreated = 'GameCreated',
 }
 
 export type JoinResponse = Record<string, never>;
@@ -18,8 +20,13 @@ export type CreateResponse = {
 };
 
 export type StatusMessage = {
-  type: 'status';
+  status: 'success' | 'fail' | 'info';
   message: StatusNotification;
+
+  // The subject of the message, e.g. who joined.
+  // This way the client can tell if this is a "response"
+  // to a previous action or really a status notification.
+  player?: string;
 };
 
 export type RejectedResponseMessage = {

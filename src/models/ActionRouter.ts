@@ -70,10 +70,9 @@ class ActionRouter {
     broadcastMessage(
       ws,
       game.gameId,
-      WSResponseUtil.status(Server.StatusNotification.PlayerJoined),
+      WSResponseUtil.status('success', Server.StatusNotification.PlayerJoined),
     );
 
-    // send back player id
     ws.send(WSResponseUtil.success(Client.Actions.JoinGame));
   }
 
@@ -96,16 +95,22 @@ class ActionRouter {
       return;
     }
 
-    // TODO check turn
+    const piece = game.player1 === playerId ? 1 : 2;
+
+    // check turn
+    if (piece !== game.currentTurn) {
+      ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.WrongTurn));
+      return;
+    }
 
     try {
-      game.placePiece(game.player1 === playerId ? 1 : 2, column);
+      game.placePiece(piece, column);
     } catch (err) {
       ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.FullColumn));
       return;
     }
 
-    // TODO broadcast placement to both players
+    // TODO broadcast new board state to both players
 
     // TODO switch turn
   }

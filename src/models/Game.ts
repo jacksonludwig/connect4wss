@@ -14,6 +14,7 @@ class Game {
   public gameId: GameType['gameId'];
   public player1: GameType['player'];
   public player2: GameType['player'];
+  public currentTurn: Player;
 
   /**
    * Matrix representing game board. Each cell contains 0, 1, or 2:
@@ -31,6 +32,7 @@ class Game {
     this.gameId = nanoid();
     this.player1 = nanoid();
     this.player2 = '';
+    this.currentTurn = 1;
 
     // generate 6x7 empty board
     this.board = Array.from(Array(this.ROWS)).fill(Array.from(Array(this.COLS)).fill(0));
@@ -104,6 +106,13 @@ class Game {
   }
 
   /**
+   * Switch the turn to the other player
+   */
+  private switchTurn() {
+    this.currentTurn = this.currentTurn === 1 ? 2 : 1;
+  }
+
+  /**
    * Drop a piece into a column and check if there was a winner as a result.
    *
    * @throws if the column is already full.
@@ -120,6 +129,8 @@ class Game {
     const openIndex = col.reverse().findIndex((cell) => cell === 0);
 
     this.board[column][openIndex] = player as Player;
+
+    this.switchTurn();
 
     return this.getWinner() > 0;
   }
