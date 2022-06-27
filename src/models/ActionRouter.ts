@@ -68,9 +68,9 @@ class ActionRouter {
 
     // broadcast join to other player
     broadcastMessage(
-      ws,
       game.gameId,
       WSResponseUtil.status('success', Server.StatusNotification.PlayerJoined),
+      ws,
     );
 
     ws.send(WSResponseUtil.success(Client.Actions.JoinGame));
@@ -110,9 +110,17 @@ class ActionRouter {
       return;
     }
 
-    // TODO broadcast new board state to both players
+    // return success status to player who placed the piece
+    ws.send(WSResponseUtil.success(Client.Actions.PlacePiece));
 
-    // TODO switch turn
+    // broadcast new board state to both players
+    broadcastMessage(
+      gameId,
+      WSResponseUtil.status('success', Server.StatusNotification.GameState, {
+        board: game.board,
+        currentTurn: game.currentTurn,
+      }),
+    );
   }
 }
 

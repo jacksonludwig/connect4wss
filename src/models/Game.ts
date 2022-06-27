@@ -8,7 +8,7 @@ type GameType = {
 /**
  * 0 represents an empty cell/no player
  */
-type Player = 0 | 1 | 2;
+export type Player = 0 | 1 | 2;
 
 class Game {
   public gameId: GameType['gameId'];
@@ -23,7 +23,7 @@ class Game {
    * 1 => player1's piece
    * 2 => player2's piece
    */
-  private board: Player[][];
+  public board: Player[][];
 
   private readonly ROWS = 6;
   private readonly COLS = 7;

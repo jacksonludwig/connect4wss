@@ -1,3 +1,4 @@
+import { Player } from '../models/Game';
 import { Actions } from './Client';
 
 export enum Error {
@@ -11,6 +12,7 @@ export enum Error {
 export enum StatusNotification {
   PlayerJoined = 'PlayerJoined',
   GameCreated = 'GameCreated',
+  GameState = 'GameStateUpdate',
 }
 
 export type JoinResponse = Record<string, never>;
@@ -19,14 +21,16 @@ export type CreateResponse = {
   gameId: string;
 };
 
+export type GameStatusBody = {
+  board: Player[][];
+  currentTurn: Player;
+};
+
 export type StatusMessage = {
   status: 'success' | 'fail' | 'info';
   message: StatusNotification;
 
-  // The subject of the message, e.g. who joined.
-  // This way the client can tell if this is a "response"
-  // to a previous action or really a status notification.
-  player?: string;
+  body?: GameStatusBody;
 };
 
 export type RejectedResponseMessage = {

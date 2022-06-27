@@ -32,9 +32,9 @@ export const getPlayerFromWS = (ws: WebSocket): string | undefined => {
 /**
  * Broadcast message to all websockets connected to the game besides the one given in the parameter
  */
-export const broadcastMessage = (ws: WebSocket, gameId: string, message: string) => {
+export const broadcastMessage = (gameId: string, message: string, excludedWs?: WebSocket) => {
   const gameClients = Array.from(wsServer.clients).filter(
-    (client) => getGameFromWS(client) === gameId && client !== ws,
+    (client) => getGameFromWS(client) === gameId && client !== excludedWs,
   );
 
   gameClients.forEach((client) => {

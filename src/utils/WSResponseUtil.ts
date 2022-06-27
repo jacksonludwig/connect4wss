@@ -27,12 +27,12 @@ class WSResponseUtil {
   public static status(
     status: 'success' | 'fail' | 'info',
     notification: Server.StatusNotification,
-    player?: string,
+    body?: Server.GameStatusBody,
   ): string {
     const response = {
       status,
       message: notification,
-      player,
+      body,
     } as Server.StatusMessage;
 
     return JSON.stringify(response);
