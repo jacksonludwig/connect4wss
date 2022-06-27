@@ -2,6 +2,7 @@ export enum Error {
   GameNotFound = 'GameNotFound',
   GameFull = 'GameFull',
   NotInGame = 'NotInGame',
+  FullColumn = 'FullColumn',
 }
 
 export type JoinResponse = {

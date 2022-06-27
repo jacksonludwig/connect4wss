@@ -83,8 +83,17 @@ class ActionRouter {
       return;
     }
 
-    // TODO place piece
-    console.log('trying to place in column ' + column);
+    // TODO check turn
+
+    try {
+      game.placePiece(game.player1 === playerId ? 1 : 2, column);
+    } catch (err) {
+      ws.send(WSResponseUtil.error(Server.Error.FullColumn));
+      return;
+    }
+
+    // TODO broadcast placement to both players
+    // TODO switch turn
   }
 }
 
