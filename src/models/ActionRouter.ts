@@ -60,6 +60,8 @@ class ActionRouter {
     saveGameToWS(ws, game.gameId);
     savePlayerToWS(ws, game.player2);
 
+    // TODO broadcast join to other player
+
     // send back player id
     ws.send(WSResponseUtil.success({ playerId: game.player2 }));
   }
