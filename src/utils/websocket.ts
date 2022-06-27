@@ -1,4 +1,5 @@
 import { WebSocket } from 'ws';
+import { wsServer } from '../app';
 
 /**
  * Save a game id to the websocket
@@ -26,4 +27,17 @@ export const getGameFromWS = (ws: WebSocket): string | undefined => {
  */
 export const getPlayerFromWS = (ws: WebSocket): string | undefined => {
   return (ws as any).playerId;
+};
+
+/**
+ * Broadcast message to all websockets connected to the game besides the one given in the parameter
+ */
+export const broadcastMessage = (ws: WebSocket, gameId: string, message: string) => {
+  const gameClients = Array.from(wsServer.clients).filter(
+    (client) => getGameFromWS(client) === gameId && client !== ws,
+  );
+
+  gameClients.forEach((client) => {
+    client.send(message);
+  });
 };

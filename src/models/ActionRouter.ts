@@ -2,7 +2,13 @@ import { WebSocket } from 'ws';
 import Game from '../models/Game';
 import * as Client from '../types/Client';
 import * as Server from '../types/Server';
-import { getGameFromWS, getPlayerFromWS, saveGameToWS, savePlayerToWS } from '../utils/websocket';
+import {
+  broadcastMessage,
+  getGameFromWS,
+  getPlayerFromWS,
+  saveGameToWS,
+  savePlayerToWS,
+} from '../utils/websocket';
 import WSResponseUtil from '../utils/WSResponseUtil';
 
 /**
@@ -24,7 +30,12 @@ class ActionRouter {
     savePlayerToWS(ws, game.player1);
 
     // send back game id and player id
-    ws.send(WSResponseUtil.success({ gameId: game.gameId, playerId: game.player1 }));
+    ws.send(
+      WSResponseUtil.success(Client.Actions.CreateGame, {
+        gameId: game.gameId,
+        playerId: game.player1,
+      }),
+    );
   }
 
   /**
@@ -44,13 +55,13 @@ class ActionRouter {
 
     // Check to see if game with id is in progress
     if (!game) {
-      ws.send(WSResponseUtil.error(Server.Error.GameNotFound));
+      ws.send(WSResponseUtil.error(Client.Actions.JoinGame, Server.Error.GameNotFound));
       return;
     }
 
     // Check if the game is full
     if (game.player2 !== '') {
-      ws.send(WSResponseUtil.error(Server.Error.GameFull));
+      ws.send(WSResponseUtil.error(Client.Actions.JoinGame, Server.Error.GameFull));
       return;
     }
 
@@ -60,10 +71,15 @@ class ActionRouter {
     saveGameToWS(ws, game.gameId);
     savePlayerToWS(ws, game.player2);
 
-    // TODO broadcast join to other player
+    // broadcast join to other player
+    broadcastMessage(
+      ws,
+      game.gameId,
+      WSResponseUtil.status(Server.StatusNotification.PlayerJoined),
+    );
 
     // send back player id
-    ws.send(WSResponseUtil.success({ playerId: game.player2 }));
+    ws.send(WSResponseUtil.success(Client.Actions.JoinGame, { playerId: game.player2 }));
   }
 
   /**
@@ -74,14 +90,14 @@ class ActionRouter {
     const playerId = getPlayerFromWS(ws);
 
     if (!gameId || !playerId) {
-      ws.send(WSResponseUtil.error(Server.Error.NotInGame));
+      ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.NotInGame));
       return;
     }
 
     const game = games.get(gameId);
 
     if (!game) {
-      ws.send(WSResponseUtil.error(Server.Error.GameNotFound));
+      ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.GameNotFound));
       return;
     }
 
@@ -90,11 +106,12 @@ class ActionRouter {
     try {
       game.placePiece(game.player1 === playerId ? 1 : 2, column);
     } catch (err) {
-      ws.send(WSResponseUtil.error(Server.Error.FullColumn));
+      ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.FullColumn));
       return;
     }
 
     // TODO broadcast placement to both players
+
     // TODO switch turn
   }
 }
