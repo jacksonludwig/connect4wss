@@ -77,8 +77,6 @@ class Game {
   public placePiece(player: Omit<Player, 0>, column: number): Player {
     const col = this.board.map((row) => row[column]) as number[];
 
-    console.log(col);
-
     // Sum up column to see if it is full
     if (col.reduce((acc, current) => acc + current) >= this.COLS) {
       throw Error(`column ${column} is already full`);
@@ -87,7 +85,6 @@ class Game {
     // reverse the column to place at the "bottom", then find the first open cell
     const openIndex = this.ROWS - col.reverse().findIndex((cell) => cell === 0) - 1;
 
-    console.log(openIndex);
     this.board[openIndex][column] = player as Player;
 
     this.switchTurn();
