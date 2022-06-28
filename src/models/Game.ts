@@ -33,9 +33,8 @@ class Game {
     this.player1 = nanoid();
     this.player2 = '';
     this.currentTurn = 1;
-    this.board = [];
 
-    // generate 6x7 empty board
+    // generate ROWxCOL empty board
     this.board = Array(this.ROWS)
       .fill(0)
       .map(() => Array(this.COLS).fill(0));
@@ -44,10 +43,8 @@ class Game {
   /**
    * Add a second player to the game.
    */
-  public addPlayer(): string {
+  public addPlayer() {
     this.player2 = nanoid();
-
-    return this.player2;
   }
 
   /**
