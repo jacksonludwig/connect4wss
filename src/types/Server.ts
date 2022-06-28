@@ -1,4 +1,4 @@
-import { Player } from '../models/Game';
+import { PlayerToken } from '../models/Game';
 import { Actions } from './Client';
 
 export enum Error {
@@ -22,8 +22,8 @@ export type CreateResponse = {
 };
 
 export type GameStatusBody = {
-  board: Player[][];
-  currentTurn: Player;
+  board: PlayerToken[][];
+  currentTurn: PlayerToken;
 };
 
 export type StatusMessage = {

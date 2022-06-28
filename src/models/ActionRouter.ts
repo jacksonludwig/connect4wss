@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import Game, { Player } from '../models/Game';
+import Game, { PlayerToken } from '../models/Game';
 import * as Client from '../types/Client';
 import * as Server from '../types/Server';
 import {
@@ -103,7 +103,7 @@ class ActionRouter {
       return;
     }
 
-    let winner: Player;
+    let winner: PlayerToken;
 
     try {
       winner = game.placePiece(piece, column);

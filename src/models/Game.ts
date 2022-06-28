@@ -8,13 +8,13 @@ type GameType = {
 /**
  * 0 represents an empty cell/no player
  */
-export type Player = 0 | 1 | 2;
+export type PlayerToken = 0 | 1 | 2;
 
 class Game {
   public gameId: GameType['gameId'];
   public player1: GameType['player'];
   public player2: GameType['player'];
-  public currentTurn: Player;
+  public currentTurn: PlayerToken;
 
   /**
    * Matrix representing game board. Each cell contains 0, 1, or 2:
@@ -23,7 +23,7 @@ class Game {
    * 1 => player1's piece
    * 2 => player2's piece
    */
-  public board: Player[][];
+  public board: PlayerToken[][];
 
   private readonly ROWS = 6;
   private readonly COLS = 7;
@@ -39,9 +39,6 @@ class Game {
     this.board = Array(this.ROWS)
       .fill(0)
       .map(() => Array(this.COLS).fill(0));
-
-    // Can't do this because javascript is stupid.
-    // this.board = Array.from(Array(this.ROWS)).fill(Array.from(Array(this.COLS)).fill(0));
   }
 
   /**
@@ -58,7 +55,7 @@ class Game {
    *
    * Check if there was a winner.
    */
-  private getWinner(): Player {
+  private getWinner(): PlayerToken {
     return 0;
   }
 
@@ -74,7 +71,7 @@ class Game {
    *
    * @throws if the column is already full.
    */
-  public placePiece(player: Omit<Player, 0>, column: number): Player {
+  public placePiece(player: Omit<PlayerToken, 0>, column: number): PlayerToken {
     const col = this.board.map((row) => row[column]) as number[];
 
     // Sum up column to see if it is full
@@ -85,7 +82,7 @@ class Game {
     // reverse the column to place at the "bottom", then find the first open cell
     const openIndex = this.ROWS - col.reverse().findIndex((cell) => cell === 0) - 1;
 
-    this.board[openIndex][column] = player as Player;
+    this.board[openIndex][column] = player as PlayerToken;
 
     const winner = this.getWinner();
 
