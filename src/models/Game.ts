@@ -33,9 +33,15 @@ class Game {
     this.player1 = nanoid();
     this.player2 = '';
     this.currentTurn = 1;
+    this.board = [];
 
     // generate 6x7 empty board
-    this.board = Array.from(Array(this.ROWS)).fill(Array.from(Array(this.COLS)).fill(0));
+    this.board = Array(this.ROWS)
+      .fill(0)
+      .map(() => Array(this.COLS).fill(0));
+
+    // Can't do this because javascript is stupid.
+    // this.board = Array.from(Array(this.ROWS)).fill(Array.from(Array(this.COLS)).fill(0));
   }
 
   /**
@@ -48,61 +54,12 @@ class Game {
   }
 
   /**
-   * TODO: use another algorithm that only checks around the last piece that was placed.
+   * TODO: use algorithm that only checks around the last piece that was placed.
    *
    * Check if there was a winner.
-   *
-   * Adapted from https://codereview.stackexchange.com/a/127105 (Castle Kerr)
    */
   private getWinner(): Player {
-    const EMPTY_SLOT = 0;
-
-    for (let row = 0; row < this.COLS; row++) {
-      for (let col = 0; col < this.ROWS; col++) {
-        const player = this.board[row][col];
-
-        // don't check empty slots
-        if (player == EMPTY_SLOT) continue;
-
-        // look right
-        if (
-          col + 3 < this.ROWS &&
-          player == this.board[row][col + 1] &&
-          player == this.board[row][col + 2] &&
-          player == this.board[row][col + 3]
-        )
-          return player;
-
-        // look up
-        if (row + 3 < this.COLS) {
-          if (
-            player == this.board[row + 1][col] &&
-            player == this.board[row + 2][col] &&
-            player == this.board[row + 3][col]
-          )
-            return player;
-
-          // look up & right
-          if (
-            col + 3 < this.ROWS &&
-            player == this.board[row + 1][col + 1] &&
-            player == this.board[row + 2][col + 2] &&
-            player == this.board[row + 3][col + 3]
-          )
-            return player;
-
-          // look up & left
-          if (
-            col - 3 >= 0 &&
-            player == this.board[row + 1][col - 1] &&
-            player == this.board[row + 2][col - 2] &&
-            player == this.board[row + 3][col - 3]
-          )
-            return player;
-        }
-      }
-    }
-    return EMPTY_SLOT; // no winner found
+    return 0;
   }
 
   /**
@@ -120,15 +77,18 @@ class Game {
   public placePiece(player: Omit<Player, 0>, column: number): Player {
     const col = this.board.map((row) => row[column]) as number[];
 
+    console.log(col);
+
     // Sum up column to see if it is full
     if (col.reduce((acc, current) => acc + current) >= this.COLS) {
       throw Error(`column ${column} is already full`);
     }
 
     // reverse the column to place at the "bottom", then find the first open cell
-    const openIndex = col.reverse().findIndex((cell) => cell === 0);
+    const openIndex = this.ROWS - col.findIndex((cell) => cell === 0) - 1;
 
-    this.board[column][openIndex] = player as Player;
+    console.log(openIndex);
+    this.board[openIndex][column] = player as Player;
 
     this.switchTurn();
 

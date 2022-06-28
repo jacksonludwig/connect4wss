@@ -115,6 +115,8 @@ class ActionRouter {
     // return success status to player who placed the piece
     ws.send(WSResponseUtil.success(Client.Actions.PlacePiece));
 
+    game.board.forEach((row) => console.log(row));
+
     // broadcast new board state to both players
     broadcastMessage(
       gameId,
