@@ -85,7 +85,7 @@ class Game {
     }
 
     // reverse the column to place at the "bottom", then find the first open cell
-    const openIndex = this.ROWS - col.findIndex((cell) => cell === 0) - 1;
+    const openIndex = this.ROWS - col.reverse().findIndex((cell) => cell === 0) - 1;
 
     console.log(openIndex);
     this.board[openIndex][column] = player as Player;
