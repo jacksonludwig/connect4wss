@@ -87,9 +87,11 @@ class Game {
 
     this.board[openIndex][column] = player as Player;
 
+    const winner = this.getWinner();
+
     this.switchTurn();
 
-    return this.getWinner();
+    return winner;
   }
 }
 
