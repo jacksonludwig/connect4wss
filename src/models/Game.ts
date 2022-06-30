@@ -52,19 +52,15 @@ class Game {
    *
    * Check if there was a winner.
    */
-  private getWinner(lastPieceData: {
-    column: number;
-    row: number;
-    player: PlayerToken;
-  }): PlayerToken {
+  private getWinner(lastPieceData: { column: number; row: number }): PlayerToken {
     const board = this.board;
-    const { column, row, player } = lastPieceData;
+    const player = this.currentTurn;
+    const { column, row } = lastPieceData;
 
     let count = 0;
 
     // vertical: check downward from last index
     for (let r = 0; r < 4; r++) {
-      console.log(`r: ${r}, row: ${row}`);
       if (row + r >= this.ROWS) break;
       if (board[row + r][column] !== player) break;
       count++;
@@ -154,7 +150,6 @@ class Game {
     const winner = this.getWinner({
       column: column,
       row: openIndex,
-      player: player as PlayerToken,
     });
 
     console.log(`WINNER: ${winner}`);

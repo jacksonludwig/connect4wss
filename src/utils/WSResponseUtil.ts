@@ -27,7 +27,7 @@ class WSResponseUtil {
   public static status(
     status: 'success' | 'fail' | 'info',
     notification: Server.StatusNotification,
-    body?: Server.GameStatusBody,
+    body?: Server.GameStateBody | Server.GameOverBody,
   ): string {
     const response = {
       status,

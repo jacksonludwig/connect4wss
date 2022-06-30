@@ -12,7 +12,8 @@ export enum Error {
 export enum StatusNotification {
   PlayerJoined = 'PlayerJoined',
   GameCreated = 'GameCreated',
-  GameState = 'GameStateUpdate',
+  GameState = 'GameState',
+  GameOver = 'GameOver',
 }
 
 export type JoinResponse = Record<string, never>;
@@ -21,16 +22,20 @@ export type CreateResponse = {
   gameId: string;
 };
 
-export type GameStatusBody = {
+export type GameStateBody = {
   board: PlayerToken[][];
   currentTurn: PlayerToken;
+};
+
+export type GameOverBody = {
+  winner: PlayerToken;
 };
 
 export type StatusMessage = {
   status: 'success' | 'fail' | 'info';
   message: StatusNotification;
 
-  body?: GameStatusBody;
+  body?: GameStateBody;
 };
 
 export type RejectedResponseMessage = {

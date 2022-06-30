@@ -128,9 +128,17 @@ class ActionRouter {
       }),
     );
 
+    // broadcast winner
     if (winner !== 0) {
-      // TODO broadcast winner
+      broadcastMessage(
+        gameId,
+        WSResponseUtil.status('success', Server.StatusNotification.GameOver, {
+          winner,
+        }),
+      );
     }
+
+    // TODO: delete game
   }
 }
 
