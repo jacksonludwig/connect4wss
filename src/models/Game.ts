@@ -60,13 +60,13 @@ class Game {
     const board = this.board;
     const { column, row, player } = lastPieceData;
 
-    let count = 1;
+    let count = 0;
 
     // vertical: check downward from last index
     for (let r = 0; r < 4; r++) {
       console.log(`r: ${r}, row: ${row}`);
-      if (row - r < 0) break;
-      if (board[row - r][column] !== player) break;
+      if (row + r >= this.ROWS) break;
+      if (board[row + r][column] !== player) break;
       count++;
     }
 
@@ -74,15 +74,19 @@ class Game {
 
     if (count >= 4) return player;
 
-    count = 1;
+    count = 0;
 
     // horizontal: check 3 left, 3 right
-    for (let c = 1; c < 4; c++) {
+    for (let c = 0; c < 4; c++) {
       if (column + c >= this.COLS) break;
       if (board[row][column + c] !== player) break;
       count++;
     }
-    for (let c = 1; c < 4; c++) {
+
+    // don't double count center piece
+    count--;
+
+    for (let c = 0; c < 4; c++) {
       if (column - c < 0) break;
       if (board[row][column - c] !== player) break;
       count++;
@@ -92,11 +96,11 @@ class Game {
 
     if (count >= 4) return player;
 
-    count = 1;
+    count = 0;
     let rowCount = 0;
 
     // diagonal: check 3 left, 3 right, but iterate row each check
-    for (let c = 1; c < 4; c++) {
+    for (let c = 0; c < 4; c++) {
       if (row + rowCount >= this.ROWS) break;
       if (column + c >= this.COLS) break;
       if (board[row + rowCount][column + c] !== player) break;
@@ -105,8 +109,9 @@ class Game {
     }
 
     rowCount = 0;
+    count--;
 
-    for (let c = 1; c < 4; c++) {
+    for (let c = 0; c < 4; c++) {
       if (row - rowCount < 0) break;
       if (column - c < 0) break;
       if (board[row - rowCount][column - c] !== player) break;
