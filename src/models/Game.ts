@@ -101,9 +101,9 @@ class Game {
 
     // diagonal: check 3 left, 3 right, but iterate row each check
     for (let c = 0; c < 4; c++) {
-      if (row + rowCount >= this.ROWS) break;
+      if (row - rowCount < 0) break;
       if (column + c >= this.COLS) break;
-      if (board[row + rowCount][column + c] !== player) break;
+      if (board[row - rowCount][column + c] !== player) break;
       count++;
       rowCount++;
     }
@@ -112,9 +112,9 @@ class Game {
     count--;
 
     for (let c = 0; c < 4; c++) {
-      if (row - rowCount < 0) break;
+      if (row + rowCount >= this.ROWS) break;
       if (column - c < 0) break;
-      if (board[row - rowCount][column - c] !== player) break;
+      if (board[row + rowCount][column - c] !== player) break;
       count++;
       rowCount++;
     }
