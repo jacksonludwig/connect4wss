@@ -52,7 +52,72 @@ class Game {
    *
    * Check if there was a winner.
    */
-  private getWinner(): PlayerToken {
+  private getWinner(lastPieceData: {
+    column: number;
+    row: number;
+    player: PlayerToken;
+  }): PlayerToken {
+    const board = this.board;
+    const { column, row, player } = lastPieceData;
+
+    let count = 1;
+
+    // vertical: check downward from last index
+    for (let r = 0; r < 4; r++) {
+      console.log(`r: ${r}, row: ${row}`);
+      if (row - r < 0) break;
+      if (board[row - r][column] !== player) break;
+      count++;
+    }
+
+    console.log(`VERT COUNT: ${count}`);
+
+    if (count >= 4) return player;
+
+    count = 1;
+
+    // horizontal: check 3 left, 3 right
+    for (let c = 1; c < 4; c++) {
+      if (column + c >= this.COLS) break;
+      if (board[row][column + c] !== player) break;
+      count++;
+    }
+    for (let c = 1; c < 4; c++) {
+      if (column - c < 0) break;
+      if (board[row][column - c] !== player) break;
+      count++;
+    }
+
+    console.log(`HORIZ COUNT: ${count}`);
+
+    if (count >= 4) return player;
+
+    count = 1;
+    let rowCount = 0;
+
+    // diagonal: check 3 left, 3 right, but iterate row each check
+    for (let c = 1; c < 4; c++) {
+      if (row + rowCount >= this.ROWS) break;
+      if (column + c >= this.COLS) break;
+      if (board[row + rowCount][column + c] !== player) break;
+      count++;
+      rowCount++;
+    }
+
+    rowCount = 0;
+
+    for (let c = 1; c < 4; c++) {
+      if (row - rowCount < 0) break;
+      if (column - c < 0) break;
+      if (board[row - rowCount][column - c] !== player) break;
+      count++;
+      rowCount++;
+    }
+
+    console.log(`DIAG COUNT: ${count}`);
+
+    if (count >= 4) return player;
+
     return 0;
   }
 
@@ -81,7 +146,13 @@ class Game {
 
     this.board[openIndex][column] = player as PlayerToken;
 
-    const winner = this.getWinner();
+    const winner = this.getWinner({
+      column: column,
+      row: openIndex,
+      player: player as PlayerToken,
+    });
+
+    console.log(`WINNER: ${winner}`);
 
     this.switchTurn();
 
