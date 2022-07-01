@@ -6,6 +6,7 @@ import {
   broadcastMessage,
   getGameFromWS,
   getPlayerFromWS,
+  removePlayersFromGame,
   saveGameToWS,
   savePlayerToWS,
 } from '../utils/websocket';
@@ -138,7 +139,13 @@ class ActionRouter {
       );
     }
 
-    // TODO: delete game
+    // TODO: handle tie
+
+    // TODO: allow rematch
+
+    // delete game
+    removePlayersFromGame(game.gameId);
+    games.delete(game.gameId);
   }
 }
 

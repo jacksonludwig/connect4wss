@@ -9,10 +9,24 @@ export const saveGameToWS = (ws: WebSocket, gameId: string) => {
 };
 
 /**
+ * Remove a game id from the websocket
+ */
+export const removeGameFromWS = (ws: WebSocket) => {
+  (ws as any).gameId = undefined;
+};
+
+/**
  * Save a player id to the websocket
  */
 export const savePlayerToWS = (ws: WebSocket, playerId: string) => {
   (ws as any).playerId = playerId;
+};
+
+/**
+ * Remove a player id from the websocket
+ */
+export const removePlayerFromWs = (ws: WebSocket) => {
+  (ws as any).playerId = undefined;
 };
 
 /**
@@ -39,5 +53,19 @@ export const broadcastMessage = (gameId: string, message: string, excludedWs?: W
 
   gameClients.forEach((client) => {
     client.send(message);
+  });
+};
+
+/**
+ * Remove game and player ids from every player in the game
+ */
+export const removePlayersFromGame = (gameId: string) => {
+  const gameClients = Array.from(wsServer.clients).filter(
+    (client) => getGameFromWS(client) === gameId,
+  );
+
+  gameClients.forEach((client) => {
+    removeGameFromWS(client);
+    removePlayerFromWs(client);
   });
 };
