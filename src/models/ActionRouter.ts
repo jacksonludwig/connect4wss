@@ -22,6 +22,10 @@ class ActionRouter {
    * Add a new game to the global game map using the game id
    */
   public static CreateGame(ws: WebSocket): void {
+    // only create game if not already in one
+    if (getGameFromWS(ws))
+      ws.send(WSResponseUtil.error(Client.Actions.CreateGame, Server.Error.AlreadyInGame));
+
     const game = new Game();
 
     games.set(game.gameId, game);

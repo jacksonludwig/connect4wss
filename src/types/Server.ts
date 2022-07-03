@@ -7,6 +7,7 @@ export enum Error {
   NotInGame = 'NotInGame',
   FullColumn = 'FullColumn',
   WrongTurn = 'WrongTurn',
+  AlreadyInGame = 'AlreadyInGame',
 }
 
 export enum StatusNotification {
