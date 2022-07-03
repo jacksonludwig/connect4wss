@@ -10,6 +10,7 @@ function handleConnection(
   console.log('-- CLIENT CONNECTED --');
   console.log(request.headers);
 
+  (socket as any).isAlive = true;
   socket.on('message', handleMessage);
 }
 

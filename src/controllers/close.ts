@@ -1,5 +1,6 @@
 import http from 'http';
 import WebSocket from 'ws';
+import { pingInterval } from '../app';
 import { games } from '../models/ActionRouter';
 import { getGameFromWS } from '../utils/websocket';
 
@@ -9,6 +10,8 @@ function handleClose(
   request: http.IncomingMessage,
 ) {
   console.log('-- CLIENT CLOSING CONNECTION --');
+
+  clearInterval(pingInterval);
 
   const gameId = getGameFromWS(socket);
 

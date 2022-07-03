@@ -7,6 +7,17 @@ const httpServer = http.createServer();
 export const wsServer = new WebSocketServer({ server: httpServer });
 
 wsServer.on('connection', handleConnection);
+
+export const pingInterval = setInterval(function ping() {
+  wsServer.clients.forEach(function each(ws) {
+    const wsCasted = ws as any;
+    if (wsCasted.isAlive === false) return ws.terminate();
+
+    wsCasted.isAlive = false;
+    ws.ping();
+  });
+}, 30000);
+
 wsServer.on('close', handleClose);
 
 export default httpServer;
