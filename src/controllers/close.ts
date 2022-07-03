@@ -1,14 +1,7 @@
-import WebSocket from 'ws';
-import {
-  broadcastMessage,
-  getGameFromWS,
-  getPlayerFromWS,
-  removePlayersFromGame,
-  saveGameToWS,
-  savePlayerToWS,
-} from '../utils/websocket';
 import http from 'http';
+import WebSocket from 'ws';
 import { games } from '../models/ActionRouter';
+import { getGameFromWS } from '../utils/websocket';
 
 function handleClose(
   this: WebSocket.Server<WebSocket.WebSocket>,
@@ -21,10 +14,11 @@ function handleClose(
 
   const game = games.get(gameId || '');
 
-  if (!game)
-    return;
+  if (!game) return;
 
   // TODO: don't delete game if only one player disconnects
+
+  console.log(`deleting game with id: ${gameId}`);
   games.delete(gameId || '');
 }
 
