@@ -22,6 +22,6 @@ export const pingInterval = setInterval(function ping() {
     wsCasted.isAlive = false;
     ws.ping();
   });
-}, 3000);
+}, 30000);
 
 export default httpServer;
