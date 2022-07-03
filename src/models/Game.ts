@@ -50,8 +50,6 @@ class Game {
   }
 
   /**
-   * TODO: use algorithm that only checks around the last piece that was placed.
-   *
    * Check if there was a winner.
    */
   private getWinner(lastPieceData: { column: number; row: number }): PlayerToken {
