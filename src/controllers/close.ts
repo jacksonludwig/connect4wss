@@ -7,7 +7,7 @@ export function cleanUpGames(this: WebSocket.Server<WebSocket.WebSocket>) {
 
   // TODO: don't delete game if only one player disconnects
   [...games.values()].forEach((game) => {
-    if (![...this.clients.values()].find((client) => getGameFromWS(client))) {
+    if (![...this.clients.values()].find((client) => getGameFromWS(client) === game.gameId)) {
       console.log(`deleting empty game with id: ${game.gameId}`);
       games.delete(game.gameId);
     }
