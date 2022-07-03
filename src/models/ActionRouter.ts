@@ -23,8 +23,10 @@ class ActionRouter {
    */
   public static CreateGame(ws: WebSocket): void {
     // only create game if not already in one
-    if (getGameFromWS(ws))
+    if (getGameFromWS(ws)) {
       ws.send(WSResponseUtil.error(Client.Actions.CreateGame, Server.Error.AlreadyInGame));
+      return;
+    }
 
     const game = new Game();
 
