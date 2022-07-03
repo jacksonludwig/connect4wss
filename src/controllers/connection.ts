@@ -11,6 +11,10 @@ function handleConnection(
   console.log(request.headers);
 
   (socket as any).isAlive = true;
+  socket.on('pong', function () {
+    (this as any).isAlive = true;
+  });
+
   socket.on('message', handleMessage);
 }
 

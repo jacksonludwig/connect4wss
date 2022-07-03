@@ -4,11 +4,7 @@ import { pingInterval } from '../app';
 import { games } from '../models/ActionRouter';
 import { getGameFromWS } from '../utils/websocket';
 
-function handleClose(
-  this: WebSocket.Server<WebSocket.WebSocket>,
-  socket: WebSocket.WebSocket,
-  request: http.IncomingMessage,
-) {
+function handleClose(this: WebSocket.Server<WebSocket.WebSocket>, socket: WebSocket.WebSocket) {
   console.log('-- CLIENT CLOSING CONNECTION --');
 
   clearInterval(pingInterval);
