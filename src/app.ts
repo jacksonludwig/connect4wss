@@ -11,7 +11,7 @@ wsServer.on('connection', handleConnection);
 export const pingInterval = setInterval(function ping() {
   wsServer.clients.forEach(function each(ws) {
     const wsCasted = ws as any;
-    if (wsCasted.isAlive === false) return ws.terminate();
+    if (wsCasted.isAlive === false) return ws.close();
 
     wsCasted.isAlive = false;
     ws.ping();
