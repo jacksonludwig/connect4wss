@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import Game, { PlayerToken } from '../models/Game';
+import Game from '../models/Game';
 import * as Client from '../types/Client';
 import * as Server from '../types/Server';
 import {
@@ -104,10 +104,8 @@ class ActionRouter {
       return;
     }
 
-    let winner: PlayerToken;
-
     try {
-      winner = game.placePiece(piece, column);
+      game.placePiece(piece, column);
     } catch (err) {
       ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.FullColumn));
       return;
@@ -126,26 +124,27 @@ class ActionRouter {
       WSResponseUtil.status('success', Server.StatusNotification.GameState, {
         board: game.board,
         currentTurn: game.currentTurn,
+        winner: game.winner,
       }),
     );
 
     // broadcast winner
-    if (winner !== 0) {
+    if (game.winner !== 0) {
       broadcastMessage(
         gameId,
         WSResponseUtil.status('success', Server.StatusNotification.GameOver, {
-          winner,
+          winner: game.winner,
         }),
       );
+
+      // delete game
+      removePlayersFromGame(game.gameId);
+      games.delete(game.gameId);
     }
 
     // TODO: handle tie
 
     // TODO: allow rematch
-
-    // delete game
-    removePlayersFromGame(game.gameId);
-    games.delete(game.gameId);
   }
 }
 

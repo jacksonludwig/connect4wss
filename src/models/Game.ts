@@ -15,6 +15,7 @@ class Game {
   public player1: GameType['player'];
   public player2: GameType['player'];
   public currentTurn: PlayerToken;
+  public winner: PlayerToken;
 
   /**
    * Matrix representing game board. Each cell contains 0, 1, or 2:
@@ -33,6 +34,7 @@ class Game {
     this.player1 = nanoid();
     this.player2 = '';
     this.currentTurn = 1;
+    this.winner = 0;
 
     // generate ROWxCOL empty board
     this.board = Array(this.ROWS)
@@ -134,11 +136,14 @@ class Game {
    *
    * @throws if the column is already full.
    */
-  public placePiece(player: Omit<PlayerToken, 0>, column: number): PlayerToken {
+  public placePiece(player: Omit<PlayerToken, 0>, column: number) {
     const col = this.board.map((row) => row[column]) as number[];
 
     // Sum up column to see if it is full
-    if (col.reduce((acc, current) => acc + current) >= this.COLS) {
+    if (
+      (col.map((player) => player && 1) as number[]).reduce((acc, current) => acc + current) >=
+      this.ROWS
+    ) {
       throw Error(`column ${column} is already full`);
     }
 
@@ -156,7 +161,7 @@ class Game {
 
     this.switchTurn();
 
-    return winner;
+    this.winner = winner;
   }
 }
 

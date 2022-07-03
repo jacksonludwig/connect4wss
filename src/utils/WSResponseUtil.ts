@@ -30,6 +30,7 @@ class WSResponseUtil {
     body?: Server.GameStateBody | Server.GameOverBody,
   ): string {
     const response = {
+      name: 'StatusNotification',
       status,
       message: notification,
       body,
