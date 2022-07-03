@@ -1,24 +1,15 @@
-import http from 'http';
 import WebSocket from 'ws';
-import { pingInterval } from '../app';
 import { games } from '../models/ActionRouter';
 import { getGameFromWS } from '../utils/websocket';
 
-function handleClose(this: WebSocket.Server<WebSocket.WebSocket>, socket: WebSocket.WebSocket) {
-  console.log('-- CLIENT CLOSING CONNECTION --');
-
-  clearInterval(pingInterval);
-
-  const gameId = getGameFromWS(socket);
-
-  const game = games.get(gameId || '');
-
-  if (!game) return;
+export function cleanUpGames(this: WebSocket.Server<WebSocket.WebSocket>) {
+  console.log('-- CHECKING FOR ORPHAN GAMES --');
 
   // TODO: don't delete game if only one player disconnects
-
-  console.log(`deleting game with id: ${gameId}`);
-  games.delete(gameId || '');
+  [...games.values()].forEach((game) => {
+    if (![...this.clients.values()].find((client) => getGameFromWS(client))) {
+      console.log(`deleting empty game with id: ${game.gameId}`);
+      games.delete(game.gameId);
+    }
+  });
 }
-
-export default handleClose;
