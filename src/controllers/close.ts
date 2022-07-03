@@ -18,7 +18,6 @@ export function cleanUpGames(this: WebSocket.Server<WebSocket.WebSocket>) {
  * Terminate the socket if the connection is not alive. Ping to check if it is alive.
  */
 export function checkLiveness(ws: WebSocket.WebSocket) {
-  console.log('test' + ws);
   const wsCasted = ws as any;
   if (wsCasted.isAlive === false) {
     return ws.terminate();
