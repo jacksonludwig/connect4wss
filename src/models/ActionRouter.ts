@@ -135,7 +135,7 @@ class ActionRouter {
     );
 
     // broadcast winner
-    if (game.winner !== 0) {
+    if (game.winner !== -1) {
       broadcastMessage(
         gameId,
         WSResponseUtil.status('success', Server.StatusNotification.GameOver, {

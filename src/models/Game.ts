@@ -15,7 +15,8 @@ class Game {
   public player1: GameType['player'];
   public player2: GameType['player'];
   public currentTurn: PlayerToken;
-  public winner: PlayerToken;
+  public winner: PlayerToken | -1;
+  public turnCount: number;
 
   /**
    * Matrix representing game board. Each cell contains 0, 1, or 2:
@@ -35,6 +36,7 @@ class Game {
     this.player2 = '';
     this.currentTurn = 1;
     this.winner = 0;
+    this.turnCount = 0;
 
     // generate ROWxCOL empty board
     this.board = Array(this.ROWS)
@@ -50,9 +52,9 @@ class Game {
   }
 
   /**
-   * Check if there was a winner.
+   * Check if there was a winner, or return 0 if there is a tie.
    */
-  private getWinner(lastPieceData: { column: number; row: number }): PlayerToken {
+  private getWinner(lastPieceData: { column: number; row: number }): PlayerToken | -1 {
     const board = this.board;
     const player = this.currentTurn;
     const { column, row } = lastPieceData;
@@ -119,7 +121,9 @@ class Game {
 
     if (count >= 4) return player;
 
-    return 0;
+    if (this.turnCount >= this.ROWS * this.COLS) return 0;
+
+    return -1;
   }
 
   /**
@@ -127,6 +131,7 @@ class Game {
    */
   private switchTurn() {
     this.currentTurn = this.currentTurn === 1 ? 2 : 1;
+    this.turnCount++;
   }
 
   /**

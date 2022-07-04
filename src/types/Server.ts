@@ -29,7 +29,7 @@ export type GameStateBody = {
 };
 
 export type GameOverBody = {
-  winner: PlayerToken;
+  winner: PlayerToken | -1;
 };
 
 export type StatusMessage = {
