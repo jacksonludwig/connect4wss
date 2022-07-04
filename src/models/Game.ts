@@ -36,7 +36,7 @@ class Game {
     this.player2 = '';
     this.currentTurn = 1;
     this.winner = 0;
-    this.turnCount = 0;
+    this.turnCount = 1;
 
     // generate ROWxCOL empty board
     this.board = Array(this.ROWS)
