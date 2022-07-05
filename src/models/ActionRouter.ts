@@ -148,8 +148,6 @@ class ActionRouter {
       games.delete(game.gameId);
     }
 
-    // TODO: handle tie
-
     // TODO: allow rematch
   }
 }
