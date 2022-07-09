@@ -76,11 +76,15 @@ class ActionRouter {
     // broadcast join to other player
     broadcastMessage(
       game.gameId,
-      WSResponseUtil.status('success', Server.StatusNotification.PlayerJoined),
+      WSResponseUtil.status<undefined>('success', Server.StatusNotification.PlayerJoined),
       ws,
     );
 
-    ws.send(WSResponseUtil.success(Client.Actions.JoinGame));
+    ws.send(
+      WSResponseUtil.success<Server.JoinResponse>(Client.Actions.JoinGame, {
+        gameId: game.gameId,
+      }),
+    );
   }
 
   /**
@@ -118,7 +122,7 @@ class ActionRouter {
     }
 
     // return success status to player who placed the piece
-    ws.send(WSResponseUtil.success(Client.Actions.PlacePiece));
+    ws.send(WSResponseUtil.success<Server.PlaceResponse>(Client.Actions.PlacePiece, {}));
 
     console.log('-- NEW BOARD STATE --');
     console.log(game.board);

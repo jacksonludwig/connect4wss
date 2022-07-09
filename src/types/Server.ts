@@ -17,11 +17,15 @@ export enum StatusNotification {
   GameOver = 'GameOver',
 }
 
-export type JoinResponse = Record<string, never>;
+export type JoinResponse = {
+  gameId: string;
+};
 
 export type CreateResponse = {
   gameId: string;
 };
+
+export type PlaceResponse = Record<string, never>;
 
 export type GameStateBody = {
   board: PlayerToken[][];
@@ -39,16 +43,10 @@ export type StatusMessage = {
   body?: GameStateBody;
 };
 
-export type RejectedResponseMessage = {
+export type ResponseMessage<AcceptedBody = undefined> = {
   name: Actions;
   type: 'response';
-  status: 'rejected';
+  status: 'accepted' | 'rejected';
   reason: Error;
-};
-
-export type AcceptedResponseMessage = {
-  name: Actions;
-  type: 'response';
-  status: 'accepted';
-  body: JoinResponse | CreateResponse;
+  body: AcceptedBody;
 };

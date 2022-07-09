@@ -8,26 +8,26 @@ class WSResponseUtil {
       type: 'response',
       status: 'rejected',
       reason: reason,
-    } as Server.RejectedResponseMessage;
+    } as Server.ResponseMessage;
 
     return JSON.stringify(response);
   }
 
-  public static success(name: Client.Actions, body?: Server.CreateResponse): string {
+  public static success<ResponseType>(name: Client.Actions, body: ResponseType): string {
     const response = {
       name,
       type: 'response',
       status: 'accepted',
       body,
-    } as Server.AcceptedResponseMessage;
+    } as Server.ResponseMessage<ResponseType>;
 
     return JSON.stringify(response);
   }
 
-  public static status(
+  public static status<ResponseType>(
     status: 'success' | 'fail' | 'info',
     notification: Server.StatusNotification,
-    body?: Server.GameStateBody | Server.GameOverBody,
+    body?: ResponseType,
   ): string {
     const response = {
       name: 'StatusNotification',
