@@ -46,6 +46,12 @@ class ActionRouter {
   public static JoinGame(ws: WebSocket, body: Client.JoinData) {
     let game: Game | undefined;
 
+    // Check if player is already in game
+    if (getGameFromWS(ws)) {
+      ws.send(WSResponseUtil.error(Client.Actions.JoinGame, Server.Error.AlreadyInGame));
+      return;
+    }
+
     // if no gameId is given, join the first available game we can find.
     if (!body) {
       const openGames = [...games.values()].filter((game) => game.player2 === '');
