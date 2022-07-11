@@ -22,9 +22,7 @@ export function cleanUpGames() {
       if (playerMissing) {
         broadcastMessage(
           game.gameId,
-          WSResponseUtil.status('fail', Server.StatusNotification.PlayerLeft, {
-            winner: game.winner,
-          }),
+          WSResponseUtil.status('fail', Server.StatusNotification.PlayerLeft),
         );
 
         console.log(`deleting game with missing player, game id: ${game.gameId}`);
