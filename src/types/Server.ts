@@ -8,6 +8,8 @@ export enum Error {
   FullColumn = 'FullColumn',
   WrongTurn = 'WrongTurn',
   AlreadyInGame = 'AlreadyInGame',
+  GameNotStarted = 'GameNotStarted',
+  NoGameId = 'NoGameId',
 }
 
 export enum StatusNotification {

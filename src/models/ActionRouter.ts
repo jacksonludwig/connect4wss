@@ -44,22 +44,19 @@ class ActionRouter {
    * Add the player to an existing game
    */
   public static JoinGame(ws: WebSocket, body: Client.JoinData) {
-    let game: Game | undefined;
-
     // Check if player is already in game
     if (getGameFromWS(ws)) {
       ws.send(WSResponseUtil.error(Client.Actions.JoinGame, Server.Error.AlreadyInGame));
       return;
     }
 
-    // if no gameId is given, join the first available game we can find.
+    // Check to see if no game id was given
     if (!body) {
-      const openGames = [...games.values()].filter((game) => game.player2 === '');
-
-      game = openGames.length ? openGames[0] : undefined;
-    } else {
-      game = games.get(body.gameId);
+      ws.send(WSResponseUtil.error(Client.Actions.JoinGame, Server.Error.NoGameId));
+      return;
     }
+
+    const game = games.get(body.gameId);
 
     // Check to see if game with id is in progress
     if (!game) {
@@ -109,6 +106,12 @@ class ActionRouter {
 
     if (!game) {
       ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.GameNotFound));
+      return;
+    }
+
+    // don't place piece if no second player has joined yet
+    if (!game.player2) {
+      ws.send(WSResponseUtil.error(Client.Actions.PlacePiece, Server.Error.GameNotStarted));
       return;
     }
 
