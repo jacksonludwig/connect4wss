@@ -17,6 +17,7 @@ class Game {
   public currentTurn: PlayerToken;
   public winner: PlayerToken | -1;
   public turnCount: number;
+  public gameStarted: boolean;
 
   /**
    * Matrix representing game board. Each cell contains 0, 1, or 2:
@@ -37,6 +38,7 @@ class Game {
     this.currentTurn = 1;
     this.winner = 0;
     this.turnCount = 1;
+    this.gameStarted = false;
 
     // generate ROWxCOL empty board
     this.board = Array(this.ROWS)
@@ -49,6 +51,7 @@ class Game {
    */
   public addPlayer() {
     this.player2 = nanoid();
+    this.gameStarted = true;
   }
 
   /**

@@ -17,6 +17,7 @@ export enum StatusNotification {
   GameCreated = 'GameCreated',
   GameState = 'GameState',
   GameOver = 'GameOver',
+  PlayerLeft = 'PlayerLeft',
 }
 
 export type JoinResponse = {
