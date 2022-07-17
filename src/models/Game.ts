@@ -55,16 +55,14 @@ class Game {
   }
 
   /**
-   * Check if there was a winner, or return 0 if there is a tie.
+   * Check for winner vertically
    */
-  private getWinner(lastPieceData: { column: number; row: number }): PlayerToken | -1 {
+  private getVerticalWinner(column: number, row: number): PlayerToken | -1 {
     const board = this.board;
     const player = this.currentTurn;
-    const { column, row } = lastPieceData;
 
     let count = 0;
 
-    // vertical: check downward from last index
     for (let r = 0; r < 4; r++) {
       if (row + r >= this.ROWS) break;
       if (board[row + r][column] !== player) break;
@@ -75,9 +73,17 @@ class Game {
 
     if (count >= 4) return player;
 
-    count = 0;
+    return -1;
+  }
 
-    // horizontal: check 3 left, 3 right
+  /**
+   * Check for winner horizontally
+   */
+  private getHorizontalWinner(column: number, row: number): PlayerToken | -1 {
+    const board = this.board;
+    const player = this.currentTurn;
+
+    let count = 0;
     for (let c = 0; c < 4; c++) {
       if (column + c >= this.COLS) break;
       if (board[row][column + c] !== player) break;
@@ -97,8 +103,18 @@ class Game {
 
     if (count >= 4) return player;
 
-    count = 0;
+    return -1;
+  }
+
+  /**
+   * Check for winner diagonally
+   */
+  private getWinnerDiagonal(column: number, row: number): PlayerToken | -1 {
+    let count = 0;
     let rowCount = 0;
+
+    const board = this.board;
+    const player = this.currentTurn;
 
     // diagonal: check 3 left, 3 right, but iterate row each check
     for (let c = 0; c < 4; c++) {
@@ -124,10 +140,19 @@ class Game {
 
     if (count >= 4) return player;
 
-    rowCount = 0;
-    count = 0;
+    return -1;
+  }
 
-    // reverse diagonal: check 3 left & right and iterate row upward
+  /**
+   * Check for winner in the reverse diagonal
+   */
+  private getReverseWinnerDiagonal(column: number, row: number): PlayerToken | -1 {
+    let count = 0;
+    let rowCount = 0;
+
+    const board = this.board;
+    const player = this.currentTurn;
+
     for (let c = 0; c < 4; c++) {
       if (row + rowCount >= this.ROWS) break;
       if (column + c >= this.COLS) break;
@@ -148,6 +173,22 @@ class Game {
     }
 
     if (count >= 4) return player;
+
+    return -1;
+  }
+
+  /**
+   * Check if there was a winner, or return 0 if there is a tie.
+   */
+  private getWinner(lastPieceData: { column: number; row: number }): PlayerToken | -1 {
+    const { column, row } = lastPieceData;
+
+    let winner: PlayerToken | -1;
+
+    if ((winner = this.getVerticalWinner(column, row)) > 0) return winner;
+    if ((winner = this.getHorizontalWinner(column, row)) > 0) return winner;
+    if ((winner = this.getWinnerDiagonal(column, row)) > 0) return winner;
+    if ((winner = this.getReverseWinnerDiagonal(column, row)) > 0) return winner;
 
     if (this.turnCount >= this.ROWS * this.COLS) return 0;
 
