@@ -124,6 +124,31 @@ class Game {
 
     if (count >= 4) return player;
 
+    rowCount = 0;
+    count = 0;
+
+    // reverse diagonal: check 3 left & right and iterate row upward
+    for (let c = 0; c < 4; c++) {
+      if (row + rowCount >= this.ROWS) break;
+      if (column + c >= this.COLS) break;
+      if (board[row + rowCount][column + c] !== player) break;
+      count++;
+      rowCount++;
+    }
+
+    rowCount = 0;
+    count--;
+
+    for (let c = 0; c < 4; c++) {
+      if (row - rowCount < 0) break;
+      if (column - c < 0) break;
+      if (board[row - rowCount][column - c] !== player) break;
+      count++;
+      rowCount++;
+    }
+
+    if (count >= 4) return player;
+
     if (this.turnCount >= this.ROWS * this.COLS) return 0;
 
     return -1;
