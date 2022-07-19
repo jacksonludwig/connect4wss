@@ -2,4 +2,4 @@
 
 WIP
 
-https://connect4-react-client.herokuapp.com/
+https://play-connect4-online.herokuapp.com/
